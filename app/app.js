@@ -1,5 +1,5 @@
 // Generic Strings
-const root_url = "https://ahause23.github.io/Programmer"
+const root_url = "https://ahause23.github.io/Updater"
 
 // New changes involve reading from sources.json to find the 'sources' we should pull from
 // Those sources replace the previously hard coded 'examples.json' file, and should otherwise 
@@ -33,6 +33,7 @@ function getRootUrl() {
     var url = document.URL;
     return url;
 }
+
 
 // Reads the specified file containing JSON example meta-data
 // function gatherExampleData()
@@ -138,6 +139,9 @@ async function readServerFirmwareFile(path, dispReadme = true)
         raw.send(null)
     })
 }
+//const img = document.createElement("img");
+//img.src = "https://picsum.photos/200/301";
+//document.body.appendChild(img);
 
 var app = new Vue({
     el: '#app',
@@ -166,9 +170,9 @@ var app = new Vue({
     </div>
     <b-row align="center" class="app_column">
         <div>
-            <legend>Daisy Web Programmer</legend>
-            <p> Connect to the Daisy - If this is your first time here, follow the steps in Help section below </p>
-            <p><b-button variant="es" id="connect"> Connect</b-button></p>
+            <legend>COLORTONE FIRMWARE UPDATER</legend>
+            <p> Connect to the Board - If this is your first time here, follow the steps in Help section below </p>
+            <p><b-button variant="ct" id="connect"> Connect</b-button></p>
             <dialog id="interfaceDialog">
                 Your device has multiple DFU interfaces. Select one from the list below:
                 <b-form id="interfaceForm" method="dialog">
@@ -183,25 +187,45 @@ var app = new Vue({
                     <div class="nested_list">
                         <h2>Usage:</h2>
                         <ol>
-                            <li><p>Connect the Daisy to the Computer</p></li>
-                            <li><p>Enter the system bootloader by holding the BOOT button down, and then pressing, and releasing the RESET button.</p></li>
-                            <li><p>Click the Connect button at the top of the page.</p></li>
-                            <li><p>Select, "DFU in FS Mode"</p></li>
                             <li>
+			    	<p>Unscrew and remove the back cover of your Pedal and connect the PCB Board via Micro USB DShape USB to your Computer</p>
+			    	<ul>
+					<li><p>A direct connection is recommended - not via a USB hub</p></li>
+				</ul>
+			    </li>
+                            <li>
+			    	<p>On the small PCB enable the COLORTONE Firmware Update by holding the BOOT button down(1), and then pressing, and releasing the RESET button(2).</p>
+				<ul>
+					<li><p>If the buttons were pressed in the correct order the flashing LED will turn off</p></li>
+					<li><p> <img src="img/CTFW-sm.jpg" alt="Pineapple" style="width:170px;height:60px;"> </p></li>
+				</ul>
+			    </li>
+                            <li><p>Click the Connect button at the top of this page.</p></li>
+                            <li>
+			    	<p>In the PopUp Dialog window select, "DFU in FS Mode" from the list</p>
+			    	<ul>
+			    		<li><p>If "DFU in FS Mode" does not appear try another Cable or USB port</p></li>
+			    	</ul>
+			    </li>
+			    <li>
                                 <p>Now do either of the following:</p>
                                 <ul>
-                                    <li><p>Flash the blink example</p></li>
-                                    <li><p>Select a platform and an example from the drop down menu (descriptions, diagrams, etc. coming soon)</p></li>
-                                    <li><p>Click the Choose File button, and select the .bin file you would like to flash. This can be found in a projects "build" folder.</p></li>
+                                    <li><p>Select your Colortone Pedal and Firmware Version from the drop down menu </p></li>
+                                    <li><p>If you have been sent a custom build, click the Choose File button, and select the .bin file you would like to load.</p></li>
                                 </ul>
                             </li>
-                            <li><p>Click Program, and wait for the progress bar to finish.</p></li>
-                            <li><p>Now, if the program does not start immediatley, pressing RESET on the Daisy will cause the program to start running.</p></li>
+                            <li>
+			    	<p>Click the Program button, and wait for the progress bar to finish.</p>
+				<ul>
+			    		<li><p>If the Firmware has been successfully updated the 2nd LED will start flashing again</p></li>
+			    	</ul>
+			    </li>
+                            <li><p>Now, if the program does not start immediatley, pressing RESET on the PCB will cause the program to start running.</p></li>
                         </ol>
                         <p>
-                            On windows, you may have to update the driver to WinUSB.
+                            On windows, you may have to update the driver to WinUSB to let Chrome connect to the board.
 
-                            To do this, you can download the free software, Zadig. Instructions for this can be found on the DaisyWiki in the Windows toolchain instructions page.
+                            To do this, you can download the free software, Zadig. Run Zadig and select "list all devices" in the options menu. In the Dropdown select "DFU in FS Mode". In the field to the right of the green arrow, select "WinUSB" and click "Install Driver"/"Replace Driver". 
                         </p>
                     </div>
                 </b-collapse>
@@ -213,9 +237,6 @@ var app = new Vue({
                             <li>
                                 <p>An up-to-date version of Chrome, at least version 61 or newer</p>
                             </li>
-                            <li>
-                                <p>A Daisy Seed SOM. (The user-uploaded binary will work for any STM32 chip with a built in DFU bootloader).</p>
-                            </li>
                         </ul>
                     </div>
                 </b-collapse>
@@ -225,29 +246,25 @@ var app = new Vue({
         <b-row align="between">
             <b-col align="center" class="app_column">
                 <b-container>
-                    <b-row class="p-2">
-                        <legend>Getting Started? Flash the Blink example!</legend>
-                        <div><b-button variant="es" id="blink"  :disabled="no_device">Flash Blink!</b-button></div>
-                    </b-row>
                     <hr>
                     <b-row class="p-2">
-                        <legend> Or select a platform and a program from the menu below.</legend>
+                        <legend> Select Pedal and Latest Firmware Version from menus below.</legend>
                         <b-form-select placeholder="Platform" v-model="sel_platform" textContent="Select a platform" id="platformSelector">
                             <template v-slot:first>
-                                <b-form-select-option :value="null" disabled>-- Platform --</b-form-select-option>
+                                <b-form-select-option :value="null" disabled>-- Pedal --</b-form-select-option>
                             </template>
                             <option v-for="platform in platforms" :value="platform">{{platform}}</option>
                         </b-form-select>
                         <b-form-select v-model="sel_example" id="firmwareSelector" required @change="programChanged">
                             <template v-slot:first>
-                                <b-form-select-option :value="null" disabled>-- Example --</b-form-select-option>
+                                <b-form-select-option :value="null" disabled>-- Firmware Version --</b-form-select-option>
                             </template>
                             <b-form-select-option v-for="example in platformExamples" v-bind:key="example.name" :value="example">{{example.name}}</b-form-select-option>
                         </b-form-select>
                     </b-row>
                     <hr>
                     <b-row class="p-2">
-                        <legend> Or select a file from your computer</legend>
+                        <legend> If we have sent you a custom build you can load the firmware from your computer </legend>
                             <b-form-file
                                 id="firmwareFile"
                                 v-model="firmwareFile"
@@ -263,7 +280,7 @@ var app = new Vue({
         <b-col align="center" class="app_column">
         <b-container align="center">
             <legend>Programming Section</legend>
-            <b-button id="download" variant='es' :disabled="no_device || !sel_example"> Program</b-button>
+            <b-button id="download" variant='ct' :disabled="no_device || !sel_example"> Program</b-button>
 
             <br> <br>
             <b-button variant="es" v-b-toggle.collapseAdvanced>Advanced...</b-button>
